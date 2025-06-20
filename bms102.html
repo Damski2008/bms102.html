@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AMS102 Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #eef2f3, #8e9eab);
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .quiz-container {
+      background-color: #ffffff;
+      max-width: 800px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    p {
+      font-weight: bold;
+    }
+    label {
+      display: block;
+      margin-left: 20px;
+      margin-bottom: 5px;
+    }
+    .submit-btn {
+      display: block;
+      margin: 30px auto;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #219150;
+    }
+    .feedback {
+      margin-left: 20px;
+      font-style: italic;
+      color: #2980b9;
+    }
+    .timer {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>AMS102 Quiz</h1>
+    <div class="timer" id="timer">Time Left: 60:00</div>
+    <form id="quizForm">
+      <h2>Section A: Differentiation</h2>
+
+      <p>1. If y = 7x⁴ - 2x² + x, find dy/dx.</p>
+      <label><input type="radio" name="q1" value="A"> A. 28x³ - 4x + 1</label>
+      <label><input type="radio" name="q1" value="B"> B. 28x³ + 4x - 1</label>
+      <label><input type="radio" name="q1" value="C"> C. 14x³ - 2x + 1</label>
+      <label><input type="radio" name="q1" value="D"> D. 21x³ - 2x - 1</label>
+
+      <p>2. Differentiate y = 6eˣ²</p>
+      <label><input type="radio" name="q2" value="A"> A. 6eˣ²</label>
+      <label><input type="radio" name="q2" value="B"> B. 12xeˣ²</label>
+      <label><input type="radio" name="q2" value="C"> C. 2eˣ</label>
+      <label><input type="radio" name="q2" value="D"> D. 6xeˣ²</label>
+
+      <button type="button" class="submit-btn" onclick="submitQuiz()">Submit Quiz</button>
+    </form>
+    <div id="result" class="feedback"></div>
+  </div>
+
+  <script>
+    const correctAnswers = {
+      q1: 'A',
+      q2: 'B'
+    };
+
+    function submitQuiz() {
+      let score = 0;
+      let total = Object.keys(correctAnswers).length;
+      for (let q in correctAnswers) {
+        const options = document.getElementsByName(q);
+        for (let opt of options) {
+          if (opt.checked && opt.value === correctAnswers[q]) {
+            score++;
+          }
+        }
+      }
+      document.getElementById('result').innerText = `You scored ${score} out of ${total}.`;
+    }
+
+    // Timer (1 hour)
+    let timeLeft = 60 * 60;
+    const timerEl = document.getElementById('timer');
+    const timerInterval = setInterval(() => {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerEl.innerText = `Time Left: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        submitQuiz();
+        document.getElementById('quizForm').style.pointerEvents = 'none';
+        document.getElementById('result').innerText += ' (Time expired)';
+      }
+      timeLeft--;
+    }, 1000);
+  </script>
+</body>
+</html>
